@@ -3,6 +3,11 @@ const app = express()
 
 app.use(express.json())
 
+var morgan = require('morgan')
+ 
+app.use(morgan(':method :url :body :status :res[content-length] - :response-time ms '))
+
+
 let persons = [
       { 
         "name": "Arto Hellas", 
@@ -27,8 +32,6 @@ let persons = [
 ]
   
 console.log(persons.length)
-
-
 app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
@@ -73,10 +76,8 @@ app.post('/api/persons', (req, res) => {
             error:'Number information missing'
         })
     }
-    console.log("body.name", body.name)
-    const nameCheck = persons.find(person => person.name === body.name)
-    console.log("namecheck",nameCheck)
 
+    const nameCheck = persons.find(person => person.name === body.name)
     if (nameCheck) {
         
      return res.status(400).json({
@@ -93,7 +94,7 @@ app.post('/api/persons', (req, res) => {
     persons = persons.concat(person)
 
     res.json(person)
-
+    morgan.token('body', request => JSON.stringify(request.body))
 })
 
 
@@ -101,7 +102,6 @@ const generateId = () => {
     const max = Math.floor(123456)
     const min = Math.ceil(1983)
     const newId = Math.floor(Math.random() * (max - min) + min) 
-    console.log(newId)
     return newId
 }
 
