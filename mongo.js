@@ -15,14 +15,13 @@ const person = new Person({
   name: process.argv[3],
   number: process.argv[4],
 })
-if (process.argv[3] !== undefined )
-{
-person.save().then(result => {
-  mongoose.connection.close()
-})
+if (process.argv[3] !== undefined) {
+  person.save().then(result => {
+    mongoose.connection.close()
+  })
 }
-else{
-Person.find({}).then(result => {
+else {
+  Person.find({}).then(result => {
     console.log("Phonebook:")
     result.forEach(person => {
       console.log(person.name, person.number)
